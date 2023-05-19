@@ -1,3 +1,7 @@
+//BB- Variables globales no suelen ir bien
+
+// las funciones las encuentras en cualquier lado pero const las tienens que poner arriba
+
 const ownAttacks_A = [];
 const ownAttacks_B = [];
 
@@ -568,3 +572,50 @@ async function play() {
 }
 
 play();
+
+
+
+
+
+
+//start of refactored code
+function prepareGame() {
+   /*----PLAYER1: LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
+    let board1 = createBoard_Player1();
+    board1 = placeShips_Player1(board1);
+
+  //*----PLAYER2: LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
+    let board2 = createBoard_Player2();
+    board2 = placeShips_Player2(board2);
+
+  //!!! CAMBIAR nombre ships de la fase 1 A MAYUSCULAS (quitar comentario)
+  //devuelve los siguiente cosas (quitar comentario)
+  return {
+    // devuelve shops (quitar comentario)
+    ships: SHIPS, //no dejarlo, poner "[]" sin comillas
+    board1,
+    board2,
+  }
+}
+
+
+function showBoards(state) {
+  //*----PLAYER1: MOSTRAR TABLERO */
+console.log("Tablero del jugador 1");
+console.table(board1);
+
+//*----PLAYER2: MOSTRAR TABLERO */
+console.log("Tablero del jugador 2");
+console.table(board2);
+
+
+
+}
+
+function game () {
+  // fase 1, prepare the game, hacemos una variable que se llame state para que play llame a la funcion prepare game
+  const state = prepare_game();
+
+  // frase 2, game loop (preguntar a los jugadores que jueguen)
+  play (state);
+}

@@ -184,17 +184,17 @@ let ships_Player2 = [
 ];
 
 
-const ROWS_PLAYER2 = 10;
-const COLS_PLAYER2 = 10;
+const ROWS = 10;
+const COLS = 10;
 
 
 
 //*----PLAYER1: FUNCION DE CREACION DE TABLERO */
 function createBoard_Player1() {
   let board = [];
-  for (let x = 0; x < ROWS_PLAYER1; x++) {
+  for (let x = 0; x < ROWS; x++) {
     board[x] = [];
-    for (let y = 0; y < COLS_PLAYER1; y++) {
+    for (let y = 0; y < COLS; y++) {
       board[x][y] = 0;
     }
   }
@@ -204,9 +204,9 @@ function createBoard_Player1() {
 //*----PLAYER2: FUNCION DE CREACION DE TABLERO */
 function createBoard_Player2() {
   let board = [];
-  for (let x = 0; x < ROWS_PLAYER2; x++) {
+  for (let x = 0; x < ROWS; x++) {
     board[x] = [];
-    for (let y = 0; y < COLS_PLAYER2; y++) {
+    for (let y = 0; y < COLS; y++) {
       board[x][y] = 0;
     }
   }

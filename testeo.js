@@ -2,8 +2,9 @@
 
 // las funciones las encuentras en cualquier lado pero const las tienens que poner arriba
 
-const ownAttacks_A = [];
-const ownAttacks_B = [];
+//const ownAttacks_A = [];
+//const ownAttacks_B = [];
+
 
 //GENERAL
 console.log("¡EMPIEZA EL JUEGO!");
@@ -95,8 +96,8 @@ let ships_Player1 = [
   },
 ];
 
-const ROWS_PLAYER1 = 10;
-const COLS_PLAYER1 = 10;
+const ROWS = 10;
+const COLS = 10;
 
 
 //*----PLAYER2: BARCOS */
@@ -182,10 +183,6 @@ let ships_Player2 = [
     status: "floating",
   },
 ];
-
-
-const ROWS = 10;
-const COLS = 10;
 
 
 
@@ -381,6 +378,7 @@ console.table(board2);
 
 //--------------FASE 2 JUEGO-------------
 
+
 let winner = false;
 let playerTurn = 2;
 const readline = require("readline");
@@ -404,19 +402,19 @@ function prompt() {
 }
 
 async function play() {
-  let shipsPlaced = 0;
+  let ownAttacks = [];
   while (!winner) {
     console.log(`Turno del jugador ${playerTurn}`);
 
-    let enemyBoard, ownBoard, ownAttacks;
+    let enemyBoard, ownBoard, currentAttacks;
     if (playerTurn === 1) {
       enemyBoard = board2;
       ownBoard = board1;
-      ownAttacks = ownAttacks_A;
+      currentAttacks = ownAttacks;
     } else {
       enemyBoard = board1;
       ownBoard = board2;
-      ownAttacks = ownAttacks_B;
+      currentAttacks = ownAttacks;
     }
 
     let selectedRow, selectedCol;
@@ -428,9 +426,9 @@ async function play() {
       selectedCol = col;
       validSelection =
         selectedRow >= 0 &&
-        selectedRow < ROWS_PLAYER1 &&
+        selectedRow < ROWS &&
         selectedCol >= 0 &&
-        selectedCol < COLS_PLAYER1 &&
+        selectedCol < COLS &&
         (enemyBoard[selectedRow][selectedCol] === 0 ||
           enemyBoard[selectedRow][selectedCol] === "X" ||
           enemyBoard[selectedRow][selectedCol] === "P" ||
@@ -448,7 +446,7 @@ async function play() {
       }
     }
 
-    ownAttacks.push({
+    currentAttacks.push({
       row: selectedRow,
       col: selectedCol,
     });
@@ -471,8 +469,8 @@ async function play() {
       for (let i = 0; i < ships_Player1.length; i++) {
         const ship = ships_Player1[i];
 
-        console.log(`Barco: ${ship.name}`);
-        console.log(`Coordenadas: ${JSON.stringify(ship.coords)}`);
+        //console.log(`Barco: ${ship.name}`);
+        //console.log(`Coordenadas: ${JSON.stringify(ship.coords)}`);
 
         if (sunkShips(ship, ownAttacks)) {
           console.log(
@@ -534,8 +532,8 @@ async function play() {
 
       // Comprobar si el jugador ha ganado
       let enemyShips = 0;
-      for (let x = 0; x < ROWS_PLAYER1; x++) {
-        for (let y = 0; y < COLS_PLAYER1; y++) {
+      for (let x = 0; x < ROWS; x++) {
+        for (let y = 0; y < COLS; y++) {
           if (
             enemyBoard[x][y] !== 0 &&
             enemyBoard[x][y] !== "X" &&

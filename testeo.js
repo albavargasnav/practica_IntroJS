@@ -4,7 +4,7 @@
 
 //const ownAttacks_A = [];
 //const ownAttacks_B = [];
-
+const ownAttacks = [];
 
 //GENERAL
 console.log("¡EMPIEZA EL JUEGO!");
@@ -378,7 +378,6 @@ console.table(board2);
 
 //--------------FASE 2 JUEGO-------------
 
-
 let winner = false;
 let playerTurn = 2;
 const readline = require("readline");
@@ -402,19 +401,17 @@ function prompt() {
 }
 
 async function play() {
-  let ownAttacks = [];
+  let shipsPlaced = 0;
   while (!winner) {
     console.log(`Turno del jugador ${playerTurn}`);
 
-    let enemyBoard, ownBoard, currentAttacks;
+    let enemyBoard, ownBoard;
     if (playerTurn === 1) {
       enemyBoard = board2;
       ownBoard = board1;
-      currentAttacks = ownAttacks;
     } else {
       enemyBoard = board1;
       ownBoard = board2;
-      currentAttacks = ownAttacks;
     }
 
     let selectedRow, selectedCol;
@@ -446,7 +443,7 @@ async function play() {
       }
     }
 
-    currentAttacks.push({
+    ownAttacks.push({
       row: selectedRow,
       col: selectedCol,
     });

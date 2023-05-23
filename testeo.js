@@ -462,36 +462,16 @@ async function play() {
       return hitCoords === ship.coords.length;
     }
 
-    function checkIfShipSunk(ships_Player1, ownAttacks, board) {
-      for (let i = 0; i < ships_Player1.length; i++) {
-        const ship = ships_Player1[i];
-
-        //console.log(`Barco: ${ship.name}`);
-        //console.log(`Coordenadas: ${JSON.stringify(ship.coords)}`);
-
-        if (sunkShips(ship, ownAttacks)) {
-          console.log(
-            `¡El jugador ${playerTurn} ha hundidooooo el barco ${ship.name}!`
-          );
+    function checkIfShipSunk(ships, ownAttacks, board) {
+      for (let i = 0; i < ships.length; i++) {
+        const ship = ships[i];
+        if (ship.status === "floating" && sunkShips(ship, ownAttacks)) {
+          console.log(`¡El jugador ${playerTurn} ha hundido el barco ${ship.name}!`);
           ship.status = "sunk";
-
-          // Verificar que el barco hundido sea el esperado
-          const expectedShip = ships_Player1.find(
-            (s) => s.name === ship.name && s.status !== "sunk"
-          );
-          if (expectedShip) {
-            expectedShip.status = "sunk";
-          }
-
-          // Actualizar el tablero del jugador
-          ship.coords.forEach((coord) => {
-            const { row, col } = coord;
-            board[row][col] = "H"; // H representa un barco hundido
-          });
-
-          break;
+          return true; // Retorna verdadero si se hundió un barco
         }
       }
+      return false; // Retorna falso si no se hundió ningún barco
     }
 
     // Comprobar si el ataque acierta
@@ -509,7 +489,7 @@ async function play() {
       if (hitShip) {
         console.log(`¡TOCADO! ¡El jugador ${playerTurn} ha tocado un barco!`);
 
-        checkIfShipSunk(ships_Player1, ownAttacks, enemyBoard);
+        checkIfShipSunk(ships_Player1, ownAttacks, board1);
 
         // Cambiar la coordenada a "-"
         enemyBoard[selectedRow][selectedCol] =

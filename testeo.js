@@ -388,6 +388,8 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+let lastHit = false;
+
 function prompt() {
   return new Promise((resolve, reject) => {
     rl.question(
@@ -416,6 +418,7 @@ async function play() {
 
     let selectedRow, selectedCol;
     let validSelection = false;
+    
     while (!validSelection) {
       const { row, col } = await prompt();
       console.log(`Jugador ${playerTurn} ataca a (${row}, ${col})`);
@@ -464,6 +467,7 @@ async function play() {
           )
         ) {
           hitCoords++;
+          lastHit = true;
         }
       });
       return hitCoords === ship.coords.length;
@@ -548,10 +552,11 @@ async function play() {
     } else {
       console.log(`¡AGUA! El jugador ${playerTurn} ha fallado.`);
       enemyBoard[selectedRow][selectedCol] = "-";
+      playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
     }
     // Cambiar de turno
     // repetir que el el jugador 1 pueda volver a hacer tiradas, descomentar para jugar al jugador 2
-    playerTurn = playerTurn === 1 ? 2 : 1;
+
 
     console.log("Tablero del jugador 1");
     console.table(board1);

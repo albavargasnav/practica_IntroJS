@@ -2,9 +2,9 @@
 
 // las funciones las encuentras en cualquier lado pero const las tienens que poner arriba
 
-//const ownAttacks_A = [];
-//const ownAttacks_B = [];
-const ownAttacks = [];
+const ownAttacks_A = [];
+const ownAttacks_B = [];
+
 
 //GENERAL
 console.log("¡EMPIEZA EL JUEGO!");
@@ -379,7 +379,7 @@ console.table(board2);
 //--------------FASE 2 JUEGO-------------
 
 let winner = false;
-let playerTurn = 2;
+let playerTurn = 1;
 const readline = require("readline");
 let shipsSunk = 0;
 
@@ -443,10 +443,17 @@ async function play() {
       }
     }
 
-    ownAttacks.push({
-      row: selectedRow,
-      col: selectedCol,
-    });
+    if (playerTurn === 1) {
+      ownAttacks_B.push({
+        row: selectedRow,
+        col: selectedCol,
+      });
+    } else {
+      ownAttacks_A.push({
+        row: selectedRow,
+        col: selectedCol,
+      });
+    }
 
     function sunkShips(ship, ownAttacks) {
       let hitCoords = 0;
@@ -486,15 +493,28 @@ async function play() {
       );
 
       // Cambiar la coordenada a "-"
-      const hitShip = ships_Player1.find((ship) =>
-        ship.coords.some(
-          (coord) => coord.row === selectedRow && coord.col === selectedCol
-        )
-      );
+      const hitShip =
+        playerTurn === "ships_player1"
+          ? ships_Player1.find((ship) =>
+              ship.coords.some(
+                (coord) =>
+                  coord.row === selectedRow && coord.col === selectedCol
+              )
+            )
+          : ships_Player2.find((ship) =>
+              ship.coords.some(
+                (coord) =>
+                  coord.row === selectedRow && coord.col === selectedCol
+              )
+            );
       if (hitShip) {
         console.log(`¡TOCADO! ¡El jugador ${playerTurn} ha tocado un barco!`);
 
-        checkIfShipSunk(ships_Player1, ownAttacks, board1);
+        if (playerTurn === 1) {
+          checkIfShipSunk(ships_Player2, ownAttacks_B, board2);
+        } else {
+          checkIfShipSunk(ships_Player1, ownAttacks_A, board1);
+        }
 
         // Cambiar la coordenada a "-"
         enemyBoard[selectedRow][selectedCol] =
@@ -531,7 +551,7 @@ async function play() {
     }
     // Cambiar de turno
     // repetir que el el jugador 1 pueda volver a hacer tiradas, descomentar para jugar al jugador 2
-    //playerTurn = playerTurn === 1 ? 2 : 1;
+    playerTurn = playerTurn === 1 ? 2 : 1;
 
     console.log("Tablero del jugador 1");
     console.table(board1);

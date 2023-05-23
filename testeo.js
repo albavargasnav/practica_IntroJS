@@ -468,6 +468,11 @@ async function play() {
         if (ship.status === "floating" && sunkShips(ship, ownAttacks)) {
           console.log(`¡El jugador ${playerTurn} ha hundido el barco ${ship.name}!`);
           ship.status = "sunk";
+          
+          ship.coords.forEach((coord) => {
+            const { row, col } = coord;
+            board[row][col] = "H"; // H representa un barco hundido
+          });
           return true; // Retorna verdadero si se hundió un barco
         }
       }
@@ -495,14 +500,7 @@ async function play() {
         enemyBoard[selectedRow][selectedCol] =
           hitShip.status === "sunk" ? "H" : "-";
 
-        // // verificación de si se ha hundido un barco
-        // for (let i = 0; i < ships.length; i++) {
-        //   let ship = ships[i];
-        //   if (ship.status == "floating" && checkShipStatus(ship)) {
-        //     console.log(`¡Barco hundido! ${ship.name}`);
-        //     ship.status = "sunk";
-        //   }
-        // }
+        
       } else {
         enemyBoard[selectedRow][selectedCol] = "X";
       }

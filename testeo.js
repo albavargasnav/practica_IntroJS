@@ -379,7 +379,7 @@ console.table(board2);
 //--------------FASE 2 JUEGO-------------
 
 let winner = false;
-let playerTurn = 1;
+let playerTurn = 2;
 const readline = require("readline");
 let shipsSunk = 0;
 
@@ -552,7 +552,7 @@ async function play() {
     } else {
       console.log(`¡AGUA! El jugador ${playerTurn} ha fallado.`);
       enemyBoard[selectedRow][selectedCol] = "-";
-      playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
+      //playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
     }
     // Cambiar de turno
     // repetir que el el jugador 1 pueda volver a hacer tiradas, descomentar para jugar al jugador 2

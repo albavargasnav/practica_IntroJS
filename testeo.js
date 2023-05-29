@@ -382,6 +382,7 @@ let winner = false;
 let playerTurn = 1;
 const readline = require("readline");
 let shipsSunk = 0;
+let round = 1;
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -405,6 +406,7 @@ function prompt() {
 async function play() {
   let shipsPlaced = 0;
   while (!winner) {
+    console.log(`Ronda ${round}`);
     console.log(`Turno del jugador ${playerTurn}`);
 
     let enemyBoard, ownBoard;
@@ -547,11 +549,11 @@ async function play() {
     } else {
       console.log(`¡AGUA! El jugador ${playerTurn} ha fallado.`);
       enemyBoard[selectedRow][selectedCol] = "-";
-      //playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
+      playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
     }
     // Cambiar de turno
     // repetir que el el jugador 1 pueda volver a hacer tiradas, descomentar para jugar al jugador 2
-
+    round++;
 
     console.log("Tablero del jugador 1");
     console.table(board1);

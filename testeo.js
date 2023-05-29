@@ -379,7 +379,7 @@ console.table(board2);
 //--------------FASE 2 JUEGO-------------
 
 let winner = false;
-let playerTurn = 2;
+let playerTurn = 1;
 const readline = require("readline");
 let shipsSunk = 0;
 
@@ -497,15 +497,13 @@ async function play() {
       );
 
       // Cambiar la coordenada a "-"
-      const hitShip =
-        playerTurn === "ships_player1"
-          ? ships_Player1.find((ship) =>
+      const hitShip = playerTurn === 1 ? ships_Player2.find((ship) =>
               ship.coords.some(
                 (coord) =>
                   coord.row === selectedRow && coord.col === selectedCol
               )
             )
-          : ships_Player2.find((ship) =>
+          : ships_Player1.find((ship) =>
               ship.coords.some(
                 (coord) =>
                   coord.row === selectedRow && coord.col === selectedCol
@@ -523,7 +521,7 @@ async function play() {
         // Cambiar la coordenada a "-"
         enemyBoard[selectedRow][selectedCol] =
           hitShip.status === "sunk" ? "H" : "-";
-
+        
         
       } else {
         enemyBoard[selectedRow][selectedCol] = "X";

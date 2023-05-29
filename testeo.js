@@ -458,6 +458,15 @@ async function play() {
       });
     }
 
+    function allShipsSunk(ships) {
+      for (let i = 0; i < ships.length; i++) {
+        if (ships[i].status === "floating") {
+          return false; // Aún hay barcos flotando
+        }
+      }
+      return true; // Todos los barcos están hundidos
+    }
+
     function sunkShips(ship, ownAttacks) {
       let hitCoords = 0;
       ship.coords.forEach((coord) => {
@@ -527,26 +536,14 @@ async function play() {
         enemyBoard[selectedRow][selectedCol] = "X";
       }
 
-      // Comprobar si el jugador ha ganado
-      let enemyShips = 0;
-      for (let x = 0; x < ROWS; x++) {
-        for (let y = 0; y < COLS; y++) {
-          if (
-            enemyBoard[x][y] !== 0 &&
-            enemyBoard[x][y] !== "X" &&
-            enemyBoard[x][y] !== "P" &&
-            enemyBoard[x][y] !== "-"
-          ) {
-            enemyShips++;
-          }
-        }
+      if (playerTurn === 1 && allShipsSunk(ships_Player2)) {
+        console.log("¡El jugador 1 ha ganado!");
+        winner = true;
+      } else if (playerTurn === 2 && allShipsSunk(ships_Player1)) {
+        console.log("¡El jugador 2 ha ganado!");
+        winner = true;
       }
 
-      if (enemyShips === 0) {
-        console.log(`El jugador ${playerTurn} ha ganado!`);
-        winner = true;
-        break;
-      }
     } else {
       console.log(`¡AGUA! El jugador ${playerTurn} ha fallado.`);
       enemyBoard[selectedRow][selectedCol] = "-";

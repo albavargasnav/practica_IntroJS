@@ -1,4 +1,4 @@
-//BB- Variables globales no suelen ir bien
+let playerTurn = 2;
 
 // las funciones las encuentras en cualquier lado pero const las tienens que poner arriba
 
@@ -428,26 +428,32 @@ function placeShips_Player2(board) {
 let board1 = createBoard_Player1();
 board1 = placeShips_Player1(board1);
 
-//*----PLAYER1: MOSTRAR TABLERO */
-console.log("Tablero del jugador 1");
-console.table(board1);
-
 //*----PLAYER2: LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
 let board2 = createBoard_Player2();
 board2 = placeShips_Player2(board2);
-
-//*----PLAYER2: MOSTRAR TABLERO */
-console.log("Tablero TEMPORAL del jugador 2");
-console.table(board2);
 
 
 //*----PLAYER1: TABLERO DEL ENEMIGO LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
 let board3 = createBoard_Player1();
 board3 = placeShipsEnemy_Player2(board3);
 
-//*----PLAYER2: MOSTRAR TABLERO */
-console.log("Tablero del enemigo (jugador 2)");
-console.table(board3)
+//*----PLAYER1: TABLERO DEL ENEMIGO LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
+let board4 = createBoard_Player1();
+board4 = placeShipsEnemy_Player2(board4);
+
+
+// MOSTRAR TABLEROS INICIALES
+if (playerTurn === 1) {
+  console.log("Tablero del Enemigo jugador 2");
+  console.table(board3);
+  console.log("Tablero del jugador 1");
+  console.table(board1);
+} else {
+  console.log("Tablero del Enemigo jugador 1");
+  console.table(board4);
+  console.log("Tablero del jugador 2");
+  console.table(board2);
+}
 
 
 
@@ -457,7 +463,6 @@ console.table(board3)
 //--------------FASE 2 JUEGO-------------
 
 let winner = false;
-let playerTurn = 1;
 const readline = require("readline");
 let shipsSunk = 0;
 let round = 1;
@@ -573,10 +578,11 @@ async function play() {
             const { row, col } = coord;
             board[row][col] = "H"; // H representa un barco hundido
             if (playerTurn === 1) {
-              board1[row][col] = "H";
+              board2[row][col] = "H";
               board3[row][col] = "H";
             } else {
-              board2[row][col] = "H";
+              board1[row][col] = "H";
+              board4[row][col] = "H";
             }
           });
           return true; // Retorna verdadero si se hundió un barco
@@ -614,9 +620,22 @@ async function play() {
           checkIfShipSunk(ships_Player1, ownAttacks_A, board1);
         }
 
-        // Cambiar la coordenada a "-"
-        enemyBoard[selectedRow][selectedCol] =
-          hitShip.status === "sunk" ? "H" : "T";
+        if (playerTurn === 1) {
+          board2[selectedRow][selectedCol] = hitShip.status === "sunk" ? "H" : "T";
+          // Actualizar board3 solo si board2 fue tocado
+          if (board2[selectedRow][selectedCol] === "T") {
+            board3[selectedRow][selectedCol] = "T";
+          }
+        } else {
+          board1[selectedRow][selectedCol] = hitShip.status === "sunk" ? "H" : "T";
+          // Actualizar board3 solo si board2 fue tocado
+          if (board1[selectedRow][selectedCol] === "T") {
+            board4[selectedRow][selectedCol] = "T";
+          }
+        }
+        
+
+        
         
         
       } else {
@@ -634,19 +653,36 @@ async function play() {
 
     } else {
       console.log(`¡AGUA! El jugador ${playerTurn} ha fallado.`);
-      enemyBoard[selectedRow][selectedCol] = "A";
-      playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
+      if (playerTurn === 1) {
+        board2[selectedRow][selectedCol] = "A";
+        board3[selectedRow][selectedCol] = "A";
+      } else {
+        board1[selectedRow][selectedCol] = "A";
+        board4[selectedRow][selectedCol] = "A";
+      }
+      //playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
     }
     // Cambiar de turno
     // repetir que el el jugador 1 pueda volver a hacer tiradas, descomentar para jugar al jugador 2
     round++;
 
-    console.log("Tablero del jugador 1");
-    console.table(board1);
-    console.log("Tablero del Enemigo jugador 2");
-    console.table(board3);
-    console.log("Tablero del jugador 2");
-    console.table(board2);
+
+    // MOSTRAR TABLEROS DURANTE EL TURNO
+      if (playerTurn === 1) {
+        console.log("Tablero del Enemigo jugador 2");
+        console.table(board3);
+        console.log("Tablero del jugador 1");
+        console.table(board1);
+      } else {
+        console.log("Tablero del Enemigo jugador 1");
+        console.table(board4);
+        console.log("Tablero del jugador 2");
+        console.table(board2);
+        console.log("Tablero del jugador 1");
+        console.table(board1);
+      }
+    
+    
   }
 
   // FIN DEL JUEGO

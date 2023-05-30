@@ -678,8 +678,6 @@ async function play() {
         console.table(board4);
         console.log("Tablero del jugador 2");
         console.table(board2);
-        console.log("Tablero del jugador 1");
-        console.table(board1);
       }
     
     

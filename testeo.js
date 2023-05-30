@@ -282,6 +282,76 @@ function placeShips_Player1(board) {
   return board;
 }
 
+//*----PLAYER1: FUNCION DE COLOCACION ALEATORIA DE BARCOS */
+function placeShipsEnemy_Player2(board) {
+  let shipsPlaced = 0;
+
+  while (shipsPlaced < ships_Player1.length) {
+    let ship = ships_Player1[shipsPlaced];
+    let shipSize = ship.size;
+    let orientation = Math.floor(Math.random() * 2); // 0 para horizontal, 1 para vertical
+    let startRow = Math.floor(Math.random() * 10); // fila inicial
+    let startCol = Math.floor(Math.random() * 10); // columna inicial
+
+    let collision = false;
+    let coords = [];
+    if (orientation === 0) {
+      if (startCol + shipSize > 10) {
+        collision = true;
+      } else {
+        for (let i = startCol; i < startCol + shipSize; i++) {
+          if (startRow >= 10 || board[startRow][i] !== 0) {
+            collision = true;
+            break;
+          } else {
+            coords.push({
+              row: startRow,
+              col: i
+            }); // añadir las coordenadas de la posición al array
+          }
+        }
+        if (!collision) {
+          for (let i = startCol; i < startCol + shipSize; i++) {
+            board[startRow][i] = 0;
+            ships_Player1[shipsPlaced].coords.push({
+              row: startRow,
+              col: i
+            });
+          }
+        }
+      }
+    } else {
+      if (startRow + shipSize > 10) {
+        collision = true;
+      } else {
+        for (let i = startRow; i < startRow + shipSize; i++) {
+          if (startCol >= 10 || board[i][startCol] !== 0) {
+            collision = true;
+            break;
+          } else {
+            coords.push({
+              row: i,
+              col: startCol
+            }); // añadir las coordenadas de la posición al array
+          }
+        }
+        if (!collision) {
+          for (let i = startRow; i < startRow + shipSize; i++) {
+            board[i][startCol] = 0;
+          }
+        }
+      }
+    }
+
+    if (!collision) {
+      ships_Player1[shipsPlaced].coords = coords; // asignar el array de coordenadas al objeto barco
+      shipsPlaced++;
+    }
+  }
+
+  return board;
+}
+
 //*----PLAYER2: FUNCION DE COLOCACION ALEATORIA DE BARCOS */
 function placeShips_Player2(board) {
   let shipsPlaced = 0;
@@ -367,9 +437,17 @@ let board2 = createBoard_Player2();
 board2 = placeShips_Player2(board2);
 
 //*----PLAYER2: MOSTRAR TABLERO */
-console.log("Tablero del jugador 2");
+console.log("Tablero TEMPORAL del jugador 2");
 console.table(board2);
 
+
+//*----PLAYER1: TABLERO DEL ENEMIGO LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
+let board3 = createBoard_Player1();
+board3 = placeShipsEnemy_Player2(board3);
+
+//*----PLAYER2: MOSTRAR TABLERO */
+console.log("Tablero del enemigo (jugador 2)");
+console.table(board3)
 
 
 
@@ -494,12 +572,19 @@ async function play() {
           ship.coords.forEach((coord) => {
             const { row, col } = coord;
             board[row][col] = "H"; // H representa un barco hundido
+            if (playerTurn === 1) {
+              board1[row][col] = "H";
+              board3[row][col] = "H";
+            } else {
+              board2[row][col] = "H";
+            }
           });
           return true; // Retorna verdadero si se hundió un barco
         }
       }
       return false; // Retorna falso si no se hundió ningún barco
     }
+
 
     // Comprobar si el ataque acierta
     if (enemyBoard[selectedRow][selectedCol] !== 0) {
@@ -531,7 +616,7 @@ async function play() {
 
         // Cambiar la coordenada a "-"
         enemyBoard[selectedRow][selectedCol] =
-          hitShip.status === "sunk" ? "H" : "-";
+          hitShip.status === "sunk" ? "H" : "T";
         
         
       } else {
@@ -546,9 +631,10 @@ async function play() {
         winner = true;
       }
 
+
     } else {
       console.log(`¡AGUA! El jugador ${playerTurn} ha fallado.`);
-      enemyBoard[selectedRow][selectedCol] = "-";
+      enemyBoard[selectedRow][selectedCol] = "A";
       playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
     }
     // Cambiar de turno
@@ -557,6 +643,8 @@ async function play() {
 
     console.log("Tablero del jugador 1");
     console.table(board1);
+    console.log("Tablero del Enemigo jugador 2");
+    console.table(board3);
     console.log("Tablero del jugador 2");
     console.table(board2);
   }

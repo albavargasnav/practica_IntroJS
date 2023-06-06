@@ -1,4 +1,4 @@
-let playerTurn = 2;
+let playerTurn = 1;
 
 // las funciones las encuentras en cualquier lado pero const las tienens que poner arriba
 
@@ -286,8 +286,8 @@ function placeShips_Player1(board) {
 function placeShipsEnemy_Player2(board) {
   let shipsPlaced = 0;
 
-  while (shipsPlaced < ships_Player1.length) {
-    let ship = ships_Player1[shipsPlaced];
+  while (shipsPlaced < ships_Player2.length) {
+    let ship = ships_Player2[shipsPlaced];
     let shipSize = ship.size;
     let orientation = Math.floor(Math.random() * 2); // 0 para horizontal, 1 para vertical
     let startRow = Math.floor(Math.random() * 10); // fila inicial
@@ -313,7 +313,7 @@ function placeShipsEnemy_Player2(board) {
         if (!collision) {
           for (let i = startCol; i < startCol + shipSize; i++) {
             board[startRow][i] = 0;
-            ships_Player1[shipsPlaced].coords.push({
+            ships_Player2[shipsPlaced].coords.push({
               row: startRow,
               col: i
             });
@@ -344,7 +344,7 @@ function placeShipsEnemy_Player2(board) {
     }
 
     if (!collision) {
-      ships_Player1[shipsPlaced].coords = coords; // asignar el array de coordenadas al objeto barco
+      ships_Player2[shipsPlaced].coords = coords; // asignar el array de coordenadas al objeto barco
       shipsPlaced++;
     }
   }
@@ -423,6 +423,76 @@ function placeShips_Player2(board) {
   return board;
 }
 
+//*----PLAYER1: FUNCION DE COLOCACION ALEATORIA DE BARCOS */
+function placeShipsEnemy_Player1(board) {
+  let shipsPlaced = 0;
+
+  while (shipsPlaced < ships_Player1.length) {
+    let ship = ships_Player1[shipsPlaced];
+    let shipSize = ship.size;
+    let orientation = Math.floor(Math.random() * 2); // 0 para horizontal, 1 para vertical
+    let startRow = Math.floor(Math.random() * 10); // fila inicial
+    let startCol = Math.floor(Math.random() * 10); // columna inicial
+
+    let collision = false;
+    let coords = [];
+    if (orientation === 0) {
+      if (startCol + shipSize > 10) {
+        collision = true;
+      } else {
+        for (let i = startCol; i < startCol + shipSize; i++) {
+          if (startRow >= 10 || board[startRow][i] !== 0) {
+            collision = true;
+            break;
+          } else {
+            coords.push({
+              row: startRow,
+              col: i
+            }); // añadir las coordenadas de la posición al array
+          }
+        }
+        if (!collision) {
+          for (let i = startCol; i < startCol + shipSize; i++) {
+            board[startRow][i] = 0;
+            ships_Player1[shipsPlaced].coords.push({
+              row: startRow,
+              col: i
+            });
+          }
+        }
+      }
+    } else {
+      if (startRow + shipSize > 10) {
+        collision = true;
+      } else {
+        for (let i = startRow; i < startRow + shipSize; i++) {
+          if (startCol >= 10 || board[i][startCol] !== 0) {
+            collision = true;
+            break;
+          } else {
+            coords.push({
+              row: i,
+              col: startCol
+            }); // añadir las coordenadas de la posición al array
+          }
+        }
+        if (!collision) {
+          for (let i = startRow; i < startRow + shipSize; i++) {
+            board[i][startCol] = 0;
+          }
+        }
+      }
+    }
+
+    if (!collision) {
+      ships_Player1[shipsPlaced].coords = coords; // asignar el array de coordenadas al objeto barco
+      shipsPlaced++;
+    }
+  }
+
+  return board;
+}
+
 
 //*----PLAYER1: LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
 let board1 = createBoard_Player1();
@@ -434,12 +504,12 @@ board2 = placeShips_Player2(board2);
 
 
 //*----PLAYER1: TABLERO DEL ENEMIGO LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
-let board3 = createBoard_Player1();
-board3 = placeShipsEnemy_Player2(board3);
+let board3 = createBoard_Player2();
+//board3 = placeShipsEnemy_Player2(board3);
 
 //*----PLAYER1: TABLERO DEL ENEMIGO LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
 let board4 = createBoard_Player1();
-board4 = placeShipsEnemy_Player2(board4);
+//board4 = placeShipsEnemy_Player1(board4);
 
 
 // MOSTRAR TABLEROS INICIALES
@@ -634,10 +704,6 @@ async function play() {
           }
         }
         
-
-        
-        
-        
       } else {
         enemyBoard[selectedRow][selectedCol] = "X";
       }
@@ -673,11 +739,15 @@ async function play() {
         console.table(board3);
         console.log("Tablero del jugador 1");
         console.table(board1);
+        console.log("Tablero del jugador 2");
+        console.table(board2);
       } else {
         console.log("Tablero del Enemigo jugador 1");
         console.table(board4);
         console.log("Tablero del jugador 2");
         console.table(board2);
+        console.log("Tablero del jugador 1");
+        console.table(board1);
       }
     
     

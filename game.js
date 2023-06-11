@@ -1,21 +1,24 @@
+//--------------VARIABLES GLOBALES-------------
+
+//Turno para comenzar el juego
 let playerTurn = 1;
 
-// las funciones las encuentras en cualquier lado pero const las tienens que poner arriba
+// Conteo de ataques 
+const ownAttacks_A = []; //Jugador 1
+const ownAttacks_B = []; //Jugador 2
 
-const ownAttacks_A = [];
-const ownAttacks_B = [];
+// Conteo limite de numero de disparos 
+let player1Shots = 0; //Jugador 1
+let player2Shots = 0; //Jugador 2
 
-let player1Shots = 0;
-let player2Shots = 0;
-
-
-//GENERAL
-console.log("¡EMPIEZA EL JUEGO!");
-
-//--------------FASE 1 COLOCACION-------------
+// Numero de columnas y filas 
+const ROWS = 10;
+const COLS = 10;
 
 
-//*----PLAYER1: BARCOS */
+//--------------FASE 1: COLOCACION DE BARCOS EN EL TABLERO-------------
+
+// Barcos del Jugador 1
 let ships_Player1 = [
   {
     name: "portaaviones",
@@ -99,11 +102,7 @@ let ships_Player1 = [
   },
 ];
 
-const ROWS = 10;
-const COLS = 10;
-
-
-//*----PLAYER2: BARCOS */
+// Barcos del Jugador 2
 let ships_Player2 = [
   {
     name: "portaaviones",
@@ -187,9 +186,7 @@ let ships_Player2 = [
   },
 ];
 
-
-
-//*----PLAYER1: FUNCION DE CREACION DE TABLERO */
+// Creacion de tableros
 function createBoard_Player1() {
   let board = [];
   for (let x = 0; x < ROWS; x++) {
@@ -201,7 +198,6 @@ function createBoard_Player1() {
   return board;
 }
 
-//*----PLAYER2: FUNCION DE CREACION DE TABLERO */
 function createBoard_Player2() {
   let board = [];
   for (let x = 0; x < ROWS; x++) {
@@ -213,8 +209,7 @@ function createBoard_Player2() {
   return board;
 }
 
-
-//*----PLAYER1: FUNCION DE COLOCACION ALEATORIA DE BARCOS */
+// Colocacion aleatoria de barcos en los tableros
 function placeShips_Player1(board) {
   let shipsPlaced = 0;
 
@@ -222,12 +217,12 @@ function placeShips_Player1(board) {
     let ship = ships_Player1[shipsPlaced];
     let shipSize = ship.size;
     let shipIcon = ship.icon;
-    let orientation = Math.floor(Math.random() * 2); // 0 para horizontal, 1 para vertical
-    let startRow = Math.floor(Math.random() * 10); // fila inicial
-    let startCol = Math.floor(Math.random() * 10); // columna inicial
-
+    let orientation = Math.floor(Math.random() * 2); 
+    let startRow = Math.floor(Math.random() * 10); 
+    let startCol = Math.floor(Math.random() * 10); 
     let collision = false;
     let coords = [];
+    
     if (orientation === 0) {
       if (startCol + shipSize > 10) {
         collision = true;
@@ -240,7 +235,7 @@ function placeShips_Player1(board) {
             coords.push({
               row: startRow,
               col: i
-            }); // añadir las coordenadas de la posición al array
+            });
           }
         }
         if (!collision) {
@@ -265,7 +260,7 @@ function placeShips_Player1(board) {
             coords.push({
               row: i,
               col: startCol
-            }); // añadir las coordenadas de la posición al array
+            }); 
           }
         }
         if (!collision) {
@@ -275,97 +270,23 @@ function placeShips_Player1(board) {
         }
       }
     }
-
     if (!collision) {
-      ships_Player1[shipsPlaced].coords = coords; // asignar el array de coordenadas al objeto barco
+      ships_Player1[shipsPlaced].coords = coords; 
       shipsPlaced++;
     }
   }
-
   return board;
 }
 
-//*----PLAYER1: FUNCION DE COLOCACION ALEATORIA DE BARCOS */
-function placeShipsEnemy_Player2(board) {
-  let shipsPlaced = 0;
-
-  while (shipsPlaced < ships_Player2.length) {
-    let ship = ships_Player2[shipsPlaced];
-    let shipSize = ship.size;
-    let orientation = Math.floor(Math.random() * 2); // 0 para horizontal, 1 para vertical
-    let startRow = Math.floor(Math.random() * 10); // fila inicial
-    let startCol = Math.floor(Math.random() * 10); // columna inicial
-
-    let collision = false;
-    let coords = [];
-    if (orientation === 0) {
-      if (startCol + shipSize > 10) {
-        collision = true;
-      } else {
-        for (let i = startCol; i < startCol + shipSize; i++) {
-          if (startRow >= 10 || board[startRow][i] !== 0) {
-            collision = true;
-            break;
-          } else {
-            coords.push({
-              row: startRow,
-              col: i
-            }); // añadir las coordenadas de la posición al array
-          }
-        }
-        if (!collision) {
-          for (let i = startCol; i < startCol + shipSize; i++) {
-            board[startRow][i] = 0;
-            ships_Player2[shipsPlaced].coords.push({
-              row: startRow,
-              col: i
-            });
-          }
-        }
-      }
-    } else {
-      if (startRow + shipSize > 10) {
-        collision = true;
-      } else {
-        for (let i = startRow; i < startRow + shipSize; i++) {
-          if (startCol >= 10 || board[i][startCol] !== 0) {
-            collision = true;
-            break;
-          } else {
-            coords.push({
-              row: i,
-              col: startCol
-            }); // añadir las coordenadas de la posición al array
-          }
-        }
-        if (!collision) {
-          for (let i = startRow; i < startRow + shipSize; i++) {
-            board[i][startCol] = 0;
-          }
-        }
-      }
-    }
-
-    if (!collision) {
-      ships_Player2[shipsPlaced].coords = coords; // asignar el array de coordenadas al objeto barco
-      shipsPlaced++;
-    }
-  }
-
-  return board;
-}
-
-//*----PLAYER2: FUNCION DE COLOCACION ALEATORIA DE BARCOS */
 function placeShips_Player2(board) {
   let shipsPlaced = 0;
-
   while (shipsPlaced < ships_Player2.length) {
     let ship = ships_Player2[shipsPlaced];
     let shipSize = ship.size;
     let shipIcon = ship.icon;
-    let orientation = Math.floor(Math.random() * 2); // 0 para horizontal, 1 para vertical
-    let startRow = Math.floor(Math.random() * 10); // fila inicial
-    let startCol = Math.floor(Math.random() * 10); // columna inicial
+    let orientation = Math.floor(Math.random() * 2); 
+    let startRow = Math.floor(Math.random() * 10); 
+    let startCol = Math.floor(Math.random() * 10); 
 
     let collision = false;
     let coords = [];
@@ -381,7 +302,7 @@ function placeShips_Player2(board) {
             coords.push({
               row: startRow,
               col: i
-            }); // añadir las coordenadas de la posición al array
+            }); 
           }
         }
         if (!collision) {
@@ -406,7 +327,7 @@ function placeShips_Player2(board) {
             coords.push({
               row: i,
               col: startCol
-            }); // añadir las coordenadas de la posición al array
+            }); 
           }
         }
         if (!collision) {
@@ -416,138 +337,56 @@ function placeShips_Player2(board) {
         }
       }
     }
-
     if (!collision) {
-      ships_Player2[shipsPlaced].coords = coords; // asignar el array de coordenadas al objeto barco
+      ships_Player2[shipsPlaced].coords = coords; 
       shipsPlaced++;
     }
   }
-
   return board;
 }
 
-//*----PLAYER1: FUNCION DE COLOCACION ALEATORIA DE BARCOS */
-function placeShipsEnemy_Player1(board) {
-  let shipsPlaced = 0;
-
-  while (shipsPlaced < ships_Player1.length) {
-    let ship = ships_Player1[shipsPlaced];
-    let shipSize = ship.size;
-    let orientation = Math.floor(Math.random() * 2); // 0 para horizontal, 1 para vertical
-    let startRow = Math.floor(Math.random() * 10); // fila inicial
-    let startCol = Math.floor(Math.random() * 10); // columna inicial
-
-    let collision = false;
-    let coords = [];
-    if (orientation === 0) {
-      if (startCol + shipSize > 10) {
-        collision = true;
-      } else {
-        for (let i = startCol; i < startCol + shipSize; i++) {
-          if (startRow >= 10 || board[startRow][i] !== 0) {
-            collision = true;
-            break;
-          } else {
-            coords.push({
-              row: startRow,
-              col: i
-            }); // añadir las coordenadas de la posición al array
-          }
-        }
-        if (!collision) {
-          for (let i = startCol; i < startCol + shipSize; i++) {
-            board[startRow][i] = 0;
-            ships_Player1[shipsPlaced].coords.push({
-              row: startRow,
-              col: i
-            });
-          }
-        }
-      }
-    } else {
-      if (startRow + shipSize > 10) {
-        collision = true;
-      } else {
-        for (let i = startRow; i < startRow + shipSize; i++) {
-          if (startCol >= 10 || board[i][startCol] !== 0) {
-            collision = true;
-            break;
-          } else {
-            coords.push({
-              row: i,
-              col: startCol
-            }); // añadir las coordenadas de la posición al array
-          }
-        }
-        if (!collision) {
-          for (let i = startRow; i < startRow + shipSize; i++) {
-            board[i][startCol] = 0;
-          }
-        }
-      }
-    }
-
-    if (!collision) {
-      ships_Player1[shipsPlaced].coords = coords; // asignar el array de coordenadas al objeto barco
-      shipsPlaced++;
-    }
-  }
-
-  return board;
-}
-
-
-//*----PLAYER1: LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
+// Asignacion de barcos colocados en sus posiciones correspondientes 
 let board1 = createBoard_Player1();
-board1 = placeShips_Player1(board1);
-
-//*----PLAYER2: LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
+board1 = placeShips_Player1(board1); // Tablero propio del jugador 1
 let board2 = createBoard_Player2();
-board2 = placeShips_Player2(board2);
+board2 = placeShips_Player2(board2); // Tablero propio del jugador 2
 
-
-//*----PLAYER1: TABLERO DEL ENEMIGO LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
-let board3 = createBoard_Player2();
-//board3 = placeShipsEnemy_Player2(board3);
-
-//*----PLAYER1: TABLERO DEL ENEMIGO LLAMAR A LA FUNCIONES DE CREACION DE TABLERO Y COLOCACION DE BARCOS */
-let board4 = createBoard_Player1();
-//board4 = placeShipsEnemy_Player1(board4);
-
-
-// MOSTRAR TABLEROS INICIALES
-if (playerTurn === 1) {
-  console.log("Tablero del Enemigo jugador 2");
-  console.table(board3);
-  console.log("Tablero del jugador 1");
-  console.table(board1);
-} else {
-  console.log("Tablero del Enemigo jugador 1");
-  console.table(board4);
-  console.log("Tablero del jugador 2");
-  console.table(board2);
-}
+// Asignar tableros enemigos 
+let board3 = createBoard_Player2(); // Tablero enemigo (jugador 2)
+let board4 = createBoard_Player1(); // Tablero enemigo (jugador 1)
 
 
 
-//--------------FASE 2 JUEGO-------------
+//--------------FASE 2: DESARROLLO DEL JUEGO POR TURNOS-------------
+
+console.log(" _  _ _   _ _  _ ___ ___ ___   _      _     ___ _    ___ _____ _   ");
+console.log("| || | | | | \\| |   \\_ _| _ \\ | |    /_\\   | __| |  / _ \\_   _/_\\  ");
+console.log("| __ | |_| | .` | |) | ||   / | |__ / _ \\  | _|| |_| (_) || |/ _ \\ ");
+console.log("|_||_|\\___/|_|\\_|___/___|_|_\\ |____/_/ \\_\\ |_| |____\\___/ |_/_/ \\_\\");
+console.log("----------------------------------------------------------------------");
+console.log("                __/___            ");
+console.log("          _____/______|           ");
+console.log("  _______/_____\\_______\\_____     ");
+console.log("  \\              < < <       |    ");
+console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+console.log("-----------------------------------------------------------------------");
+console.log("                  ¡E M P I E Z A   E L   J U E G O !");
+console.log("-----------------------------------------------------------------------");
 
 let winner = false;
 const readline = require("readline");
 let shipsSunk = 0;
 let round = 1;
-
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
 let lastHit = false;
 
 function prompt() {
   return new Promise((resolve, reject) => {
     rl.question(
-      `El jugador ${playerTurn}, ingrese la fila y columna de la casilla a atacar (fila columna):`,
+      `Jugador ${playerTurn}: Ingresa la fila y columna de la casilla a atacar (fila columna):`,
       (input) => {
         const [row, col] = input.split(" ").map((val) => parseInt(val));
         resolve({ row, col });
@@ -559,8 +398,21 @@ function prompt() {
 async function play() {
   let shipsPlaced = 0;
   while (!winner) {
-    console.log(`Ronda ${round}`);
-    console.log(`Turno del jugador ${playerTurn}`);
+    // MOSTRAR TABLEROS DURANTE EL TURNO
+    console.log("***********************************************************************");
+    console.log(`                        TURNO DEL JUGADOR ${playerTurn}`);
+    console.log("***********************************************************************");
+      if (playerTurn === 1) {
+        console.log("Tablero del Enemigo (Jugador 2)");
+        console.table(board3);
+        console.log("Tu tablero (Jugador 1)");
+        console.table(board1);
+      } else {
+        console.log("Tablero del Enemigo (Jugador 1)");
+        console.table(board4);
+        console.log("Tu tablero (Jugador 2)");
+        console.table(board2);
+      }
 
     if (playerTurn === 1 && player1Shots >= 100) {
       console.log("El jugador 1 ha alcanzado el límite de disparos permitidos.");
@@ -630,10 +482,10 @@ async function play() {
     function allShipsSunk(ships) {
       for (let i = 0; i < ships.length; i++) {
         if (ships[i].status === "floating") {
-          return false; // Aún hay barcos flotando
+          return false; 
         }
       }
-      return true; // Todos los barcos están hundidos
+      return true; 
     }
 
     function sunkShips(ship, ownAttacks) {
@@ -660,7 +512,7 @@ async function play() {
           
           ship.coords.forEach((coord) => {
             const { row, col } = coord;
-            board[row][col] = "H"; // H representa un barco hundido
+            board[row][col] = "H"; 
             if (playerTurn === 1) {
               board2[row][col] = "H";
               board3[row][col] = "H";
@@ -669,20 +521,13 @@ async function play() {
               board4[row][col] = "H";
             }
           });
-          return true; // Retorna verdadero si se hundió un barco
+          return true; 
         }
       }
-      return false; // Retorna falso si no se hundió ningún barco
+      return false; 
     }
 
-
-    // Comprobar si el ataque acierta
     if (enemyBoard[selectedRow][selectedCol] !== 0) {
-      console.log(
-        `¡TOCADO! ¡El jugador weones ${playerTurn} ha tocado un barco!`
-      );
-
-      // Cambiar la coordenada a "-"
       const hitShip = playerTurn === 1 ? ships_Player2.find((ship) =>
               ship.coords.some(
                 (coord) =>
@@ -696,8 +541,7 @@ async function play() {
               )
             );
       if (hitShip) {
-        console.log(`¡TOCADO! ¡El jugador ${playerTurn} ha tocado un barco!`);
-
+        console.log(`¡Has tocado un barco! ¡Continua jugando Jugador ${playerTurn}!`);
         if (playerTurn === 1) {
           checkIfShipSunk(ships_Player2, ownAttacks_B, board2);
         } else {
@@ -706,13 +550,11 @@ async function play() {
 
         if (playerTurn === 1) {
           board2[selectedRow][selectedCol] = hitShip.status === "sunk" ? "H" : "T";
-          // Actualizar board3 solo si board2 fue tocado
           if (board2[selectedRow][selectedCol] === "T") {
             board3[selectedRow][selectedCol] = "T";
           }
         } else {
           board1[selectedRow][selectedCol] = hitShip.status === "sunk" ? "H" : "T";
-          // Actualizar board3 solo si board2 fue tocado
           if (board1[selectedRow][selectedCol] === "T") {
             board4[selectedRow][selectedCol] = "T";
           }
@@ -732,7 +574,7 @@ async function play() {
 
 
     } else {
-      console.log(`¡AGUA! El jugador ${playerTurn} ha fallado.`);
+      console.log(`¡AGUA! Has fallado el disparo.`);
       if (playerTurn === 1) {
         board2[selectedRow][selectedCol] = "A";
         board3[selectedRow][selectedCol] = "A";
@@ -740,34 +582,12 @@ async function play() {
         board1[selectedRow][selectedCol] = "A";
         board4[selectedRow][selectedCol] = "A";
       }
-      //playerTurn = playerTurn === 1 ? 2 : 1; // Cambiar de turno
+      playerTurn = playerTurn === 1 ? 2 : 1; 
     }
-    // Cambiar de turno
-    // repetir que el el jugador 1 pueda volver a hacer tiradas, descomentar para jugar al jugador 2
     round++;
-
-
-    // MOSTRAR TABLEROS DURANTE EL TURNO
-      if (playerTurn === 1) {
-        console.log("Tablero del Enemigo jugador 2");
-        console.table(board3);
-        console.log("Tablero del jugador 1");
-        console.table(board1);
-        console.log("Tablero del jugador 2");
-        console.table(board2);
-      } else {
-        console.log("Tablero del Enemigo jugador 1");
-        console.table(board4);
-        console.log("Tablero del jugador 2");
-        console.table(board2);
-        console.log("Tablero del jugador 1");
-        console.table(board1);
-      }
-    
-    
   }
 
-  // FIN DEL JUEGO
+  // Fiin del juego
   console.log(`¡El jugador ${playerTurn} ha ganado el juego!`);
   rl.close();
 }

@@ -541,7 +541,7 @@ async function play() {
             );
 
       if (hitShip) {
-        console.log(`¡Has tocado un barco! ¡Continua jugando Jugador ${playerTurn}!`);
+        console.log(`¡Has tocado un barco!`);
         if (playerTurn === 1) {
           checkIfShipSunk(ships_Player2, ownAttacks_B, board2);
         } else {
@@ -565,10 +565,16 @@ async function play() {
       }
 
       if (playerTurn === 1 && allShipsSunk(ships_Player2)) {
-        console.log("¡El jugador 1 ha ganado!");
+        console.log("-----------------------------------------------------------------------");
+        console.log("             ¡Felicidades, has ganado el juego Jugador 1!              ");
+        console.log("                           Juego finalizado                            ");
+        console.log("-----------------------------------------------------------------------");
         winner = true;
       } else if (playerTurn === 2 && allShipsSunk(ships_Player1)) {
-        console.log("¡El jugador 2 ha ganado!");
+        console.log("-----------------------------------------------------------------------");
+        console.log("             ¡Felicidades, has ganado el juego Jugador 2!              ");
+        console.log("                           Juego finalizado                            ");
+        console.log("-----------------------------------------------------------------------");
         winner = true;
       }
 
@@ -581,13 +587,12 @@ async function play() {
         board1[selectedRow][selectedCol] = "A";
         board4[selectedRow][selectedCol] = "A";
       }
-      playerTurn = playerTurn === 1 ? 2 : 1; 
+      //playerTurn = playerTurn === 1 ? 2 : 1; 
     }
     round++;
   }
 
   // Fin del juego
-  console.log(`¡El jugador ${playerTurn} ha ganado el juego!`);
   rl.close();
 }
 

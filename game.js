@@ -398,7 +398,6 @@ function prompt() {
 async function play() {
   let shipsPlaced = 0;
   while (!winner) {
-    // MOSTRAR TABLEROS DURANTE EL TURNO
     console.log("***********************************************************************");
     console.log(`                        TURNO DEL JUGADOR ${playerTurn}`);
     console.log("***********************************************************************");
@@ -540,6 +539,7 @@ async function play() {
                   coord.row === selectedRow && coord.col === selectedCol
               )
             );
+
       if (hitShip) {
         console.log(`¡Has tocado un barco! ¡Continua jugando Jugador ${playerTurn}!`);
         if (playerTurn === 1) {
@@ -572,7 +572,6 @@ async function play() {
         winner = true;
       }
 
-
     } else {
       console.log(`¡AGUA! Has fallado el disparo.`);
       if (playerTurn === 1) {
@@ -587,7 +586,7 @@ async function play() {
     round++;
   }
 
-  // Fiin del juego
+  // Fin del juego
   console.log(`¡El jugador ${playerTurn} ha ganado el juego!`);
   rl.close();
 }

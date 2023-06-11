@@ -357,6 +357,8 @@ let board4 = createBoard_Player1(); // Tablero enemigo (jugador 1)
 
 
 
+
+
 //--------------FASE 2: DESARROLLO DEL JUEGO POR TURNOS-------------
 
 console.log(" _  _ _   _ _  _ ___ ___ ___   _      _     ___ _    ___ _____ _   ");
@@ -587,7 +589,7 @@ async function play() {
         board1[selectedRow][selectedCol] = "A";
         board4[selectedRow][selectedCol] = "A";
       }
-      //playerTurn = playerTurn === 1 ? 2 : 1; 
+      playerTurn = playerTurn === 1 ? 2 : 1; 
     }
     round++;
   }

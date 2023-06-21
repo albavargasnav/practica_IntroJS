@@ -557,12 +557,20 @@ async function play() {
       if (playerTurn === 1 && allShipsSunk(ships_Player2)) {
         console.log("-----------------------------------------------------------------------");
         console.log("             ¡Felicidades, has ganado el juego Jugador 1!              ");
+        console.log("                       Tu tablero (Jugador 1)                          ");
+        console.table(board1);
+        console.log("                   Tablero del Enemigo (Jugador 2)                          ");
+        console.table(board3);
         console.log("                           Juego finalizado                            ");
         console.log("-----------------------------------------------------------------------");
         winner = true;
       } else if (playerTurn === 2 && allShipsSunk(ships_Player1)) {
         console.log("-----------------------------------------------------------------------");
         console.log("             ¡Felicidades, has ganado el juego Jugador 2!              ");
+        console.log("                       Tu tablero (Jugador 2)                          ");
+        console.table(board2);
+        console.log("                   Tablero del Enemigo (Jugador 1)                          ");
+        console.table(board4);
         console.log("                           Juego finalizado                            ");
         console.log("-----------------------------------------------------------------------");
         winner = true;

@@ -1,10 +1,10 @@
-# Intro JS - Hundir la flota
+# Intro JS - Hundir la flota SIMULADOR
 
-Hundir la flota es un juego para dos jugadores en el que se simula una batalla de barcos. El objetivo del juego es hundir los barcos del oponente antes de que lo haga el adversario.
+Hundir la flota es un juego para dos jugadores simulado en el que se realiza una batalla de barcos. El objetivo del juego es hundir los barcos del oponente antes de que lo haga el adversario.
 
 ## Caracteristicas generales del juego
 
-- Nº de jugadores: 2 jugadores
+- Nº de jugadores: 2 jugadores (simulador)
 - Tableros: Tablero propio y del enemigo
 - Nº de filas y columnas de los tableros: 10 filas y 10 columnas
 - Nº de disparos permitidos: 100 disparos
@@ -28,11 +28,7 @@ Los barcos se colocarán ocupando unas casillas determinadas. Se representan en 
 - "L3" -> Lancha 3 (1 casilla)
 
 # Fase 2: Desarrollo del juego por turnos
-- El juego se desarrollara en la terminal de node.js. Utilizaremos el siguiente comando para iniciarlo:
-
-### `node game.js`
-
-- El juego comienza con el turno del jugador 1.
+- El juego se desarrollara realizando una simulación de la partidas con dos jugadores simulados.
 
 ## Interpretación de elementos en el tablero
 - 0 -> Casilla vacia
@@ -41,17 +37,14 @@ Los barcos se colocarán ocupando unas casillas determinadas. Se representan en 
 - H -> Barco hundido
 
 ## Cómo jugar
-Durante el turno del jugador, se pedirá al jugador que ingrese el numero de fila y columna a la que desea atacar, dejando un espacio entre ambos numeros. El mensaje mostrado para pedir el ataque será el siguiente:
- - ### `Jugador 1: Ingresa la fila y columna de la casilla a atacar (fila columna)`
-Ejemplo de ataque a la fila 4 y columna 6: 
- - ### `Jugador 1: Ingresa la fila y columna de la casilla a atacar (fila columna): 4 6`
+Los barcos se colocarán aleatoriamente y el simulador realizará diferentes tiradas.
 
-Si el jugador lanza un disparo al agua, ha fallado y se cambiara de turno al siguiente jugador, mostrando "A" en la casilla.
+Si se lanza un disparo al agua, ha fallado y se cambiara de turno al siguiente jugador, mostrando "A" en la casilla.
 
-Si el jugador ataca tocando un barco, continuara jugando y se mostrara "T" por cada casilla de barco tocado.
+Si se ataca tocando un barco, continuara jugando y se mostrara "T" por cada casilla de barco tocado.
 
-Si el jugador ataca hundiendo un barco, continuara jugando y se mostrara "H" por cada casilla de barco hundido.
+Si se ataca hundiendo un barco, continuara jugando y se mostrara "H" por cada casilla de barco hundido.
 
 ## Finalización del juego
-El juego finalizará cuando uno de los dos jugadores haya hundido todos los barcos del enemigo o cuando no haya mas disparos.
+El juego finalizará cuando se haya hundido todos los barcos del enemigo o cuando no haya mas disparos.
 Si un jugador ha ganado, se mostrará un mensaje en la consola indicando el jugador ganador y finalizando el juego automaticamente.
